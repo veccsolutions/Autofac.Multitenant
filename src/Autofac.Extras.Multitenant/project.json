@@ -1,0 +1,39 @@
+﻿{
+  "version": "4.0.0-beta7-*",
+  "description": "Multitenant applications allow individual tenants to override dependencies rather than having a simple root container for everyone. This extension provides support for an application container and tenant-specific overrides using Autofac.",
+  "summary": "Autofac extension for multitenant application support.",
+  "authors": [ "Autofac Contributors" ],
+  "tags": [ "Autofac", "DI", "IoC" ],
+  "projectUrl": "http://autofac.org",
+  "licenseUrl": "http://www.opensource.org/licenses/mit-license.php",
+  "iconUrl": "http://code.google.com/p/autofac/logo",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/autofac/Autofac"
+    },
+  "dependencies": {
+    "Autofac": "4.0.0-beta7-130"
+  },
+  "frameworks": {
+    "dnx451": {
+      "dependencies": {
+        "Microsoft.AspNet.Http": "1.0.0-beta7",
+        "Microsoft.AspNet.Http.Abstractions": "1.0.0-beta7"
+      }
+    },
+    "dnxcore50": {
+      "dependencies": {
+        "Microsoft.AspNet.Http": "1.0.0-beta7",
+        "Microsoft.AspNet.Http.Abstractions": "1.0.0-beta7",
+        "Microsoft.CSharp": "4.0.1-beta-23225",
+        "System.Collections": "4.0.11-beta-23225",
+        "System.Linq": "4.0.1-beta-23225",
+        "System.Runtime": "4.0.21-beta-23225",
+        "System.Threading": "4.0.11-beta-23225"
+      }
+    },
+    "net45": {
+      "frameworkAssemblies": { "System.Web": "4.0.0.0" }
+    }
+  }
+}

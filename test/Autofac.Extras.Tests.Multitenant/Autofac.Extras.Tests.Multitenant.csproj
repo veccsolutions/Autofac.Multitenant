@@ -74,12 +74,6 @@
     <Compile Include="Web\RequestParameterTenantIdentificationStrategyFixture.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Autofac.Extras.Multitenant\Autofac.Extras.Multitenant.csproj">
-      <Project>{321cef70-1c21-4cf0-be04-4f72427a88d6}</Project>
-      <Name>Autofac.Extras.Multitenant</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

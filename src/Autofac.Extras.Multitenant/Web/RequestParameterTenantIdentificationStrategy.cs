@@ -1,4 +1,4 @@
-// Copyright (c) 2010 Autofac Contributors
+﻿// Copyright (c) 2010 Autofac Contributors
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -23,7 +23,12 @@
 
 using System;
 using System.Globalization;
+#if NET45
 using System.Web;
+#else
+using Microsoft.AspNet.Http;
+using Microsoft.AspNet.Http.Internal;
+#endif
 
 namespace Autofac.Extras.Multitenant.Web
 {
@@ -55,6 +60,21 @@ namespace Autofac.Extras.Multitenant.Web
         /// </value>
         public string ParameterName { get; private set; }
 
+#if !NET45
+        private IHttpContextAccessor _httpContextAccessor;
+        private IHttpContextAccessor HttpContextAccessor
+        {
+            get
+            {
+                if (_httpContextAccessor == null)
+                {
+                    _httpContextAccessor = new HttpContextAccessor();
+                }
+                return _httpContextAccessor;
+            }
+        }
+#endif
+
         /// <summary>
         /// Create a new <see cref="RequestParameterTenantIdentificationStrategy"/> for
         /// the specified parameter name.
@@ -76,7 +96,7 @@ namespace Autofac.Extras.Multitenant.Web
             }
             if (parameterName.Length == 0)
             {
-                throw new ArgumentException(String.Format(CultureInfo.CurrentUICulture, Properties.Resources.ArgumentException_StringEmpty, "paramterName"), "parameterName");
+                throw new ArgumentException(String.Format(CultureInfo.CurrentUICulture, "'{0}' may not be empty.", "paramterName"), "parameterName");
             }
             this.ParameterName = parameterName;
         }
@@ -91,26 +111,35 @@ namespace Autofac.Extras.Multitenant.Web
         /// </returns>
         public bool TryIdentifyTenant(out object tenantId)
         {
-            var context = HttpContext.Current;
             try
             {
+#if NET45
+                var context = HttpContext.Current;
                 if (context == null || context.Request == null)
                 {
                     tenantId = null;
                     return false;
                 }
+
+                tenantId = context.Request.Params[this.ParameterName];
+#else
+                tenantId = this.HttpContextAccessor?.HttpContext?.Request?.Query[this.ParameterName];
+#endif
             }
-            catch(HttpException)
+#if NET45
+            catch (HttpException)
+#else
+            catch
+#endif
             {
-                    // This will happen at application startup in MVC3
-                    // integration since the ILifetimeScopeProvider tries
-                    // to be resolved from the container at the point where
-                    // a new AutofacDependencyResolver is created.
-                    tenantId = null;
-                    return false;
+                // This will happen at application startup in MVC3
+                // integration since the ILifetimeScopeProvider tries
+                // to be resolved from the container at the point where
+                // a new AutofacDependencyResolver is created.
+                tenantId = null;
+                return false;
             }
 
-            tenantId = context.Request.Params[this.ParameterName];
             return tenantId != null;
         }
     }

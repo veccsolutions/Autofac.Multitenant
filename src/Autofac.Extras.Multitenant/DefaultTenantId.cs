@@ -16,7 +16,7 @@ namespace Autofac.Extras.Multitenant
         /// </returns>
         public override string ToString()
         {
-            return Properties.Resources.DefaultTenantId_ToString;
+            return "Default Tenant";
         }
     }
 }
